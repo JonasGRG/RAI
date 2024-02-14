@@ -22,10 +22,10 @@ class DiverseDermatologyDataset(Dataset):
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
             idx = idx.tolist()
-        
-        img_name = os.path.join(self.root_dir, self.data_frame.iloc[idx, 0])
+
+        img_name = os.path.join(self.root_dir, self.data_frame.iloc[idx, 2])
         image = Image.open(img_name)
-        label = self.data_frame.iloc[idx, 1]
+        label = self.data_frame.iloc[idx, 4]
         
         if self.transform:
             image = self.transform(image)

@@ -1,6 +1,7 @@
 import argparse
 from torch.utils.data import DataLoader
 from torchvision import transforms
+from torchvision.transforms import Lambda
 from pytorch_lightning import Trainer
 from model.model import DermatologyModel  # Adjust this import path as necessary
 from data.dataset import get_dataset_splits  # Adjust this import path as necessary
@@ -9,6 +10,7 @@ def main(args):
     # Define transforms
     transform = transforms.Compose([
         transforms.Resize((256, 256)),
+        Lambda(lambda x: x.convert("RGB")),
         transforms.ToTensor(),
     ])
 
@@ -23,7 +25,7 @@ def main(args):
     model = DermatologyModel(num_classes=args.num_classes)
 
     # Initialize the PyTorch Lightning Trainer
-    trainer = Trainer(max_epochs=args.epochs, gpus=args.gpus)
+    trainer = Trainer(max_epochs=args.epochs, devices=args.gpus)
 
     # Train the model
     trainer.fit(model, train_loader, val_loader)
